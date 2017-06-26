@@ -23,11 +23,17 @@ func main() {
 	showDNSErrors := flag.Bool("errors", false, "Show DNS errors in output?")
 	domain := flag.String("domain", "", "Domain name to investigate")
 	timeout := flag.String("timeout", "3s", "Seconds to waut for DNS responses")
+	numberNS := flag.Int("number-ns", 1, "Number of nameservers to query from each country")
 	flag.Parse()
 
 	// Check sanity of options
 	if *domain == "" {
 		logrus.Errorf("No '-domain' specified, exiting")
+		flag.Usage()
+		logrus.Fatalf("")
+	}
+	if *numberNS < 0 {
+		logrus.Errorf("Illegal value provided for '-number-ns'")
 		flag.Usage()
 		logrus.Fatalf("")
 	}
@@ -55,9 +61,14 @@ func main() {
 
 	var wgQuery sync.WaitGroup
 	for _, nameservers := range nsMap {
-		// use only first ns for snow
-		// TODO: Make it configurable later
-		go query(*domain, nameservers[:1], *showDNSErrors, dnsTimeout, results, &wgQuery)
+		var nsToQuery int
+		totalNS := len(nameservers)
+		if *numberNS > totalNS {
+			nsToQuery = totalNS
+		} else {
+			nsToQuery = *numberNS
+		}
+		go query(*domain, nameservers[:nsToQuery], *showDNSErrors, dnsTimeout, results, &wgQuery)
 	}
 	wgQuery.Wait()
 	// Close channel once all queries are done
