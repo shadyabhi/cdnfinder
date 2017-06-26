@@ -29,7 +29,7 @@ func main() {
 	domain := flag.String("domain", "", "Domain name to investigate")
 	timeout := flag.String("timeout", "3s", "Seconds to waut for DNS responses")
 	numberNS := flag.Int("number-ns", 1, "Number of nameservers to query from each country")
-	filterCN := flag.String("filter-countries", "", "Comma-separated list of countries to include")
+	filterCN := flag.String("filter-countries", "", "Comma-separated list of countries to include. Default behaviour is empty and shows all countries")
 	flag.Parse()
 
 	// Check sanity of options
