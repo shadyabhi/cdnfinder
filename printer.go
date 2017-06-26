@@ -57,7 +57,7 @@ func printTable(results chan Results, wg *sync.WaitGroup) {
 	for r := range results {
 		city := fmt.Sprintf("%s - %-15s", r.nameserver.country_id, r.nameserver.city)
 		cdnHostname := fmt.Sprintf("%-10s - %s", r.cdn, r.cname)
-		table.Append([]string{r.countryName, city, cdnHostname, r.responseTime.String(), r.nameserver.ip})
+		table.Append([]string{r.countryName, city, cdnHostname, r.nameserver.ip, r.responseTime.String()})
 	}
 
 	table.Render()
