@@ -45,13 +45,6 @@ func readFile(loc string) ([]byte, error) {
 }
 
 func getCDN(domain string) (cdn string, err error) {
-	// Initialize cdns if it's not
-	if !cdns.initialized {
-		err := parseCNAMEs(dbFile)
-		if err != nil {
-			return "", err
-		}
-	}
 	for _, cdnEntry := range cdns.entries {
 		if strings.Contains(domain, cdnEntry[0]) {
 			cdn = cdnEntry[1]

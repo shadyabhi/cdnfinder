@@ -12,7 +12,6 @@ import (
 
 // printResponse prints CDN info to stdout, no error is checked
 func query(domain string, nameservers []nsInfo, showDNSErrors bool, dnsTimeout time.Duration, results chan Results, wg *sync.WaitGroup) {
-	wg.Add(1)
 	defer wg.Done()
 	for _, ns := range nameservers {
 		cname, took, err := getCNAME(domain, ns.ip, showDNSErrors, dnsTimeout)
@@ -44,7 +43,6 @@ func query(domain string, nameservers []nsInfo, showDNSErrors bool, dnsTimeout t
 }
 
 func printTable(results chan Results, wg *sync.WaitGroup) {
-	wg.Add(1)
 	defer wg.Done()
 
 	table := tablewriter.NewWriter(os.Stdout)

@@ -88,6 +88,7 @@ func createNSMap() error {
 			thisErr, ok := err.(*csv.ParseError)
 			if !ok {
 				logrus.Warningf("Got a non csv.ParseError error while parsing json")
+				continue
 			}
 			logrus.Warningf("Skipping a line while parsing csv at line: %d, column: %d", thisErr.Line, thisErr.Column)
 		}
