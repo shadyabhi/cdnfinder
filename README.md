@@ -32,3 +32,8 @@ INFO[0000] Took 669.099039ms to query DNS servers...
 >>>  0s elasped...
 ➜ $?=0 shadyabhi/cdnfinder [ 4:49PM] (master|…) %
 ```
+
+# TODO
+
+* Limit goroutines for DNS queries
+* Option to force refresh nameserver.csv
