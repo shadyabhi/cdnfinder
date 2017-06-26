@@ -56,7 +56,7 @@ func createNSMap() error {
 	// Download Nameserver file if needed
 	err := downloadNS()
 	if err != nil {
-		logrus.Fatalf("%s doesn't exist, can't proceed further without that", nsFile)
+		logrus.Fatalf("Unable to fetch %s or it doesn't exist, can't proceed further without that: %s", nsFile, err)
 	}
 
 	file, err := os.Open(nsFile)
