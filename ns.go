@@ -122,6 +122,7 @@ func createNSMap() error {
 // downloadNS downloads NS file if it doesn't exist
 func downloadNS() error {
 	if _, err := os.Stat(nsFile); os.IsNotExist(err) {
+		logrus.Warningf("%s file was not found, downloading...", nsFile)
 		err := saveNSFile()
 		if err != nil {
 			return fmt.Errorf("Couldn't fetch NS file from https://public-dns.info/")

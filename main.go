@@ -16,6 +16,8 @@ type Results struct {
 }
 
 func main() {
+	start := time.Now()
+
 	// Commandline parameters
 	showDNSErrors := flag.Bool("errors", false, "Show DNS errors in output?")
 	domain := flag.String("domain", "", "Domain name to investigate")
@@ -32,8 +34,6 @@ func main() {
 	if err != nil {
 		logrus.Errorf("Cannot parse specified '-timeout'")
 	}
-
-	logrus.Infof("Starting query at time: %s", time.Now())
 
 	// Create NS map
 	err = createNSMap()
@@ -63,5 +63,8 @@ func main() {
 	close(results)
 
 	wgPrint.Wait()
+
+	elasped := time.Since(start)
+	logrus.Infof("Took %s to query DNS servers...", elasped)
 
 }
