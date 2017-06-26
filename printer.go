@@ -1,13 +1,17 @@
 package main
 
 import (
+	"fmt"
+	"os"
 	"sync"
+	"time"
 
 	"github.com/Sirupsen/logrus"
+	"github.com/olekukonko/tablewriter"
 )
 
 // printResponse prints CDN info to stdout, no error is checked
-func printResponse(domain string, nameservers []nsInfo, showDNSErrors bool, dnsTimeout string, wg *sync.WaitGroup) {
+func query(domain string, nameservers []nsInfo, showDNSErrors bool, dnsTimeout time.Duration, results chan Results, wg *sync.WaitGroup) {
 	wg.Add(1)
 	defer wg.Done()
 	for _, ns := range nameservers {
@@ -26,7 +30,35 @@ func printResponse(domain string, nameservers []nsInfo, showDNSErrors bool, dnsT
 		countryName, ok := ccMap[ns.country_id]
 		// Only show complete information
 		if ok {
-			logrus.Infof("%s (%s:%s): %s (%s)", countryName, ns.country_id, ns.city, cdn, cname)
+			// logrus.Infof("%s (%s:%s): %s (%s)", countryName, ns.country_id, ns.city, cdn, cname)
+			result := Results{
+				cdn:         cdn,
+				countryName: countryName,
+				nameserver:  ns,
+				cname:       cname,
+			}
+			results <- result
 		}
 	}
+}
+
+func printTable(results chan Results, wg *sync.WaitGroup) {
+	wg.Add(1)
+	defer wg.Done()
+
+	table := tablewriter.NewWriter(os.Stdout)
+	headers := []string{"Country", "City", "CDN/Hostname"}
+	table.SetColWidth(60)
+	table.SetHeader(headers)
+	table.SetBorders(tablewriter.Border{Left: true, Top: true, Right: true, Bottom: true})
+	table.SetCenterSeparator("|")
+
+	for r := range results {
+		city := fmt.Sprintf("%s - %s", r.nameserver.country_id, r.nameserver.city)
+		cdnHostname := fmt.Sprintf("%-10s - %s", r.cdn, r.cname)
+		table.Append([]string{r.countryName, city, cdnHostname})
+		// table.Append([]string{"", "", ""})
+	}
+
+	table.Render()
 }

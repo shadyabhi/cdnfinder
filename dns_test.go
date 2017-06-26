@@ -24,7 +24,7 @@ func TestQueryDNS(t *testing.T) {
 	in := "torrent.abhi.host"
 	out := "abhijeetr.com."
 	duration, _ := time.ParseDuration("3s")
-	cname, err := getCNAME(in, "8.8.8.8", duration)
+	cname, err := getCNAME(in, "8.8.8.8", false, duration)
 	if err != nil {
 		t.Errorf("Error getting CNAME record: %s", err)
 	}

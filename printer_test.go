@@ -8,7 +8,7 @@ import (
 
 func TestPrintResponse(t *testing.T) {
 	var wg sync.WaitGroup
-	duration, _ = time.Duration("3s")
+	duration, _ := time.ParseDuration("3s")
 
 	ns := []nsInfo{
 		{
@@ -19,7 +19,11 @@ func TestPrintResponse(t *testing.T) {
 			reliability: 1.0,
 		},
 	}
-	go printResponse("static.licdn.com", ns, duration, &wg)
 
+	results := make(chan Results)
+	go query("static.licdn.com", ns, false, duration, results, &wg)
 	wg.Wait()
+
+	result := <-results
+	t.Logf("Queries static.licdn.com, got %s", result)
 }
