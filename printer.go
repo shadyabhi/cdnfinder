@@ -29,7 +29,7 @@ func query(domain string, nameservers []nsInfo, showDNSErrors bool, dnsTimeout t
 		}
 		countryName, ok := ccMap[ns.country_id]
 		// Only show complete information
-		if ok {
+		if ok && cdn != "" {
 			// logrus.Infof("%s (%s:%s): %s (%s)", countryName, ns.country_id, ns.city, cdn, cname)
 			result := Results{
 				cdn:          cdn,
@@ -48,16 +48,16 @@ func printTable(results chan Results, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	table := tablewriter.NewWriter(os.Stdout)
-	headers := []string{"Country", "City", "CDN/Hostname", "Time"}
+	headers := []string{"Country", "City", "CDN/Hostname", "IP", "Time"}
 	table.SetColWidth(60)
 	table.SetHeader(headers)
 	table.SetBorders(tablewriter.Border{Left: true, Top: true, Right: true, Bottom: true})
 	table.SetCenterSeparator("|")
 
 	for r := range results {
-		city := fmt.Sprintf("%s - %s", r.nameserver.country_id, r.nameserver.city)
+		city := fmt.Sprintf("%s - %-15s", r.nameserver.country_id, r.nameserver.city)
 		cdnHostname := fmt.Sprintf("%-10s - %s", r.cdn, r.cname)
-		table.Append([]string{r.countryName, city, cdnHostname, r.responseTime.String()})
+		table.Append([]string{r.countryName, city, cdnHostname, r.responseTime.String(), r.nameserver.ip})
 	}
 
 	table.Render()

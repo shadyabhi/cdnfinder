@@ -29,7 +29,7 @@ func getCNAME(domain, ns string, showDNSErrors bool, dnsTimeout time.Duration) (
 	}
 
 	if len(r.Answer) == 0 {
-		logrus.Warnf("No results for domain: %s", domain)
+		logrus.Warnf("No results for domain: %s, DNS server IP: %s", domain, ns)
 		return "", 0, err
 	}
 	var lastCNAME string
