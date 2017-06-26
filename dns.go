@@ -9,7 +9,7 @@ import (
 )
 
 // getCNAME gets the last CNAME for a record
-func getCNAME(domain, ns string, showDNSErrors bool, dnsTimeout time.Duration) (result string, err error) {
+func getCNAME(domain, ns string, showDNSErrors bool, dnsTimeout time.Duration) (result string, took time.Duration, err error) {
 	domain = mkFQDN(domain)
 	ns = ns + ":53"
 
@@ -19,18 +19,18 @@ func getCNAME(domain, ns string, showDNSErrors bool, dnsTimeout time.Duration) (
 
 	m := dns.Msg{}
 	m.SetQuestion(domain, dns.TypeA)
-	r, _, err := c.Exchange(&m, ns)
+	r, took, err := c.Exchange(&m, ns)
 
 	if err != nil {
 		if showDNSErrors {
 			logrus.Errorf("Error contacting DNS Server: %s", err)
 		}
-		return "", err
+		return "", 0, err
 	}
 
 	if len(r.Answer) == 0 {
 		logrus.Warnf("No results for domain: %s", domain)
-		return "", err
+		return "", 0, err
 	}
 	var lastCNAME string
 	for _, ans := range r.Answer {
@@ -39,7 +39,7 @@ func getCNAME(domain, ns string, showDNSErrors bool, dnsTimeout time.Duration) (
 			lastCNAME = cname.Target
 		}
 	}
-	return lastCNAME, nil
+	return lastCNAME, took, nil
 }
 
 func mkFQDN(domain string) (result string) {

@@ -15,7 +15,7 @@ func query(domain string, nameservers []nsInfo, showDNSErrors bool, dnsTimeout t
 	wg.Add(1)
 	defer wg.Done()
 	for _, ns := range nameservers {
-		cname, err := getCNAME(domain, ns.ip, showDNSErrors, dnsTimeout)
+		cname, took, err := getCNAME(domain, ns.ip, showDNSErrors, dnsTimeout)
 		if err != nil {
 			if showDNSErrors {
 				logrus.Warningf("Couldn't resolve domain: %s via ns: %s, Error: %s", domain, ns, err)
@@ -32,10 +32,11 @@ func query(domain string, nameservers []nsInfo, showDNSErrors bool, dnsTimeout t
 		if ok {
 			// logrus.Infof("%s (%s:%s): %s (%s)", countryName, ns.country_id, ns.city, cdn, cname)
 			result := Results{
-				cdn:         cdn,
-				countryName: countryName,
-				nameserver:  ns,
-				cname:       cname,
+				cdn:          cdn,
+				countryName:  countryName,
+				nameserver:   ns,
+				cname:        cname,
+				responseTime: took,
 			}
 			results <- result
 		}
@@ -47,7 +48,7 @@ func printTable(results chan Results, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	table := tablewriter.NewWriter(os.Stdout)
-	headers := []string{"Country", "City", "CDN/Hostname"}
+	headers := []string{"Country", "City", "CDN/Hostname", "Time"}
 	table.SetColWidth(60)
 	table.SetHeader(headers)
 	table.SetBorders(tablewriter.Border{Left: true, Top: true, Right: true, Bottom: true})
@@ -56,8 +57,7 @@ func printTable(results chan Results, wg *sync.WaitGroup) {
 	for r := range results {
 		city := fmt.Sprintf("%s - %s", r.nameserver.country_id, r.nameserver.city)
 		cdnHostname := fmt.Sprintf("%-10s - %s", r.cdn, r.cname)
-		table.Append([]string{r.countryName, city, cdnHostname})
-		// table.Append([]string{"", "", ""})
+		table.Append([]string{r.countryName, city, cdnHostname, r.responseTime.String()})
 	}
 
 	table.Render()

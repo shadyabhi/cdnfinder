@@ -9,10 +9,11 @@ import (
 )
 
 type Results struct {
-	cdn         string
-	countryName string
-	cname       string
-	nameserver  nsInfo
+	cdn          string
+	countryName  string
+	cname        string
+	nameserver   nsInfo
+	responseTime time.Duration
 }
 
 func main() {
