@@ -78,19 +78,22 @@ func main() {
 	go printTable(results, &wgPrint)
 
 	var wgQuery sync.WaitGroup
+
+	totalNS := 0
 	for cn, nameservers := range nsMap {
 		if *filterCN != "" && !sliceContains(includeCNs, cn) {
 			continue
 		}
-		totalNS := len(nameservers)
+		nameserversLength := len(nameservers)
 
 		// Only query the number that's available, no panic!
 		var nsToQuery int
-		if *numberNS > totalNS {
-			nsToQuery = totalNS
+		if *numberNS > nameserversLength {
+			nsToQuery = nameserversLength
 		} else {
 			nsToQuery = *numberNS
 		}
+		totalNS = totalNS + nsToQuery
 		// Each ns in it's own goroutine
 		for _, ns := range nameservers[:nsToQuery] {
 			wgQuery.Add(1)
@@ -105,5 +108,5 @@ func main() {
 	wgPrint.Wait()
 
 	elasped := time.Since(start)
-	logrus.Infof("Took %s to query DNS servers...", elasped)
+	logrus.Infof("Took %s to query %d DNS servers...", elasped, totalNS)
 }
