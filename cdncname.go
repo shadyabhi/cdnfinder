@@ -20,7 +20,7 @@ type cdnCNAMEs struct {
 
 // CDNs holds CDN CNAME information
 var cdns cdnCNAMEs
-var dbFile = "./cnamechain.json"
+var dbFile = "./data/cnamechain.json"
 
 func parseCNAMEs(loc string) error {
 	jsonFile, err := readFile(loc)

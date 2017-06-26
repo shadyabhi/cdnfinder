@@ -13,7 +13,7 @@ import (
 )
 
 const nsURL string = "https://public-dns.info/nameservers.csv"
-const nsFile string = "nameservers.csv"
+const nsFile string = "./data/nameservers.csv"
 
 type nsInfo struct {
 	ip          string

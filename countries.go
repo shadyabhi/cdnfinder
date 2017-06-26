@@ -8,7 +8,7 @@ import (
 	"fmt"
 )
 
-const ccJSONLoc string = "./countries.json"
+const ccJSONLoc string = "./data/countries.json"
 
 type countryCodes []struct {
 	Name          string `json:"name"`
