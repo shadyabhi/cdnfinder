@@ -91,8 +91,11 @@ func main() {
 		} else {
 			nsToQuery = *numberNS
 		}
-		wgQuery.Add(1)
-		go query(*domain, nameservers[:nsToQuery], *showDNSErrors, dnsTimeout, results, &wgQuery)
+		// Each ns in it's own goroutine
+		for _, ns := range nameservers[:nsToQuery] {
+			wgQuery.Add(1)
+			go query(*domain, ns, *showDNSErrors, dnsTimeout, results, &wgQuery)
+		}
 	}
 
 	wgQuery.Wait()
