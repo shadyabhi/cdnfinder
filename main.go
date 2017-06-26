@@ -20,6 +20,10 @@ type Results struct {
 func main() {
 	start := time.Now()
 
+	// Setup logging
+	logrus.SetFormatter(&logrus.TextFormatter{})
+	logrus.SetLevel(logrus.DebugLevel)
+
 	// Commandline parameters
 	showDNSErrors := flag.Bool("errors", false, "Show DNS errors in output?")
 	domain := flag.String("domain", "", "Domain name to investigate")
