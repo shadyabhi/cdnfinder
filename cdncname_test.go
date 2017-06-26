@@ -5,7 +5,7 @@ import (
 )
 
 func TestReadDb(t *testing.T) {
-	f, err := readDB("./cnamechain.json")
+	f, err := readFile("./cnamechain.json")
 	if err != nil {
 		t.Errorf("Error opening/reading file: %s", err)
 	}
@@ -23,4 +23,17 @@ func TestParseJSON(t *testing.T) {
 		t.Errorf("CDN CNAME entries are corrupted")
 	}
 	t.Logf("CDN CNAME entries loaded: %d", len(cdns.entries))
+}
+
+func TestGetCDN(t *testing.T) {
+	in := "e9706.dscg.akamaiedge.net"
+	out := "Akamai"
+	cdn, err := getCDN("e9706.dscg.akamaiedge.net")
+	if err != nil {
+		t.Errorf("Error getting CDN information from CNAME: %s", err)
+	}
+	t.Logf("Domain: %s -> CDN: %s", in, cdn)
+	if cdn != out {
+		t.Errorf("Expected: %s, got: %s", out, cdn)
+	}
 }

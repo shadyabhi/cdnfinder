@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func TestMkFQDN(t *testing.T) {
 	var ttCases = []struct {
@@ -20,8 +23,8 @@ func TestMkFQDN(t *testing.T) {
 func TestQueryDNS(t *testing.T) {
 	in := "torrent.abhi.host"
 	out := "abhijeetr.com."
-
-	cname, err := getCNAME(in, "8.8.8.8")
+	duration, _ := time.ParseDuration("3s")
+	cname, err := getCNAME(in, "8.8.8.8", duration)
 	if err != nil {
 		t.Errorf("Error getting CNAME record: %s", err)
 	}

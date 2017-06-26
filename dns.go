@@ -2,24 +2,35 @@ package main
 
 import (
 	"strings"
+	"time"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/miekg/dns"
 )
 
 // getCNAME gets the last CNAME for a record
-func getCNAME(domain, ns string) (result string, err error) {
+func getCNAME(domain, ns string, showDNSErrors bool, dnsTimeout string) (result string, err error) {
 	domain = mkFQDN(domain)
+	ns = ns + ":53"
 
 	c := dns.Client{}
+	// Don't want for more than 2 seconds
+	duration, err := time.ParseDuration(dnsTimeout)
+	if err != nil {
+		logrus.Fatalf("Couldn't parse duration provided for DNS: %s", err)
+	}
+	c.Timeout = duration
+
 	m := dns.Msg{}
 	m.SetQuestion(domain, dns.TypeA)
-	r, _, err := c.Exchange(&m, ns+":53")
+	r, _, err := c.Exchange(&m, ns)
+
 	if err != nil {
-		logrus.Errorf("Error contacting DNS Server: %s", err)
+		if showDNSErrors {
+			logrus.Errorf("Error contacting DNS Server: %s", err)
+		}
 		return "", err
 	}
-	//logrus.Debugf("queryDNS: Took %v for server %s", t, ns)
 
 	if len(r.Answer) == 0 {
 		logrus.Warnf("No results for domain: %s", domain)
