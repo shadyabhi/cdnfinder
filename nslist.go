@@ -25,7 +25,7 @@ type nsInfo struct {
 
 var nsMap map[string][]nsInfo
 
-func saveNSFile() (err error) {
+func saveNSFile(nsURL string) (err error) {
 	start := time.Now()
 
 	resp, err := http.Get(nsURL)
@@ -54,7 +54,7 @@ func saveNSFile() (err error) {
 
 func createNSMap() error {
 	// Download Nameserver file if needed
-	err := downloadNS()
+	err := downloadNS(nsURL)
 	if err != nil {
 		logrus.Fatalf("Unable to fetch %s or it doesn't exist, can't proceed further without that: %s", nsFile, err)
 	}
@@ -121,10 +121,10 @@ func createNSMap() error {
 }
 
 // downloadNS downloads NS file if it doesn't exist
-func downloadNS() error {
+func downloadNS(nsURL string) error {
 	if _, err := os.Stat(nsFile); os.IsNotExist(err) {
 		logrus.Warningf("%s file was not found, downloading...", nsFile)
-		err := saveNSFile()
+		err := saveNSFile(nsURL)
 		if err != nil {
 			return fmt.Errorf("Couldn't fetch NS file from https://public-dns.info/")
 		}
