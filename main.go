@@ -72,7 +72,7 @@ func main() {
 
 	// results channel is sent data from `query` function and
 	// is received at `printTable` to print a table
-	results := make(chan Results)
+	results := make(chan Results, 10000)
 	var wgPrint sync.WaitGroup
 	wgPrint.Add(1)
 	go printTable(results, &wgPrint)

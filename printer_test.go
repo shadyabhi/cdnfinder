@@ -18,10 +18,23 @@ func TestPrintResponse(t *testing.T) {
 		reliability: 1.0,
 	}
 
-	results := make(chan Results)
-	go query("static.licdn.com", ns, false, duration, results, &wg)
+	results := make(chan Results, 10)
+	// Start consumer, otherwise it will block
+	go func() {
+		result := <-results
+		t.Logf("Queries static.licdn.com, got %s", result)
+	}()
+
+	// Producer
+	wg.Add(1)
+	go func() {
+
+		err := query("static.licdn.com", ns, false, duration, results, &wg)
+		if err != nil {
+			t.Errorf("Woah, we have an error")
+		}
+	}()
 	wg.Wait()
 
-	result := <-results
-	t.Logf("Queries static.licdn.com, got %s", result)
+	close(results)
 }

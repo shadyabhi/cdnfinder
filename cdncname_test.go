@@ -5,7 +5,7 @@ import (
 )
 
 func TestReadDb(t *testing.T) {
-	f, err := readFile("./cnamechain.json")
+	f, err := readFile("./data/cnamechain.json")
 	if err != nil {
 		t.Errorf("Error opening/reading file: %s", err)
 	}
@@ -15,7 +15,7 @@ func TestReadDb(t *testing.T) {
 }
 
 func TestParseJSON(t *testing.T) {
-	err := parseCNAMEs("./cnamechain.json")
+	err := parseCNAMEs("./data/cnamechain.json")
 	if err != nil {
 		t.Errorf("Error parsing DB file: %s", err)
 	}
