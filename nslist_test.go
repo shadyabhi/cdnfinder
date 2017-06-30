@@ -27,7 +27,7 @@ func TestCreateNSMap(t *testing.T) {
 	// US should surely be loaded
 	_, ok := nsMap["US"]
 	if !ok || len(nsMap["US"]) < 1 {
-		t.Errorf("No US nameservers in map, something is definitely wrong")
+		t.Errorf("No US nameservers in map, current map: %#v", nsMap)
 	}
 }
 
