@@ -31,7 +31,7 @@ func TestPrintResponse(t *testing.T) {
 
 		err := query("static.licdn.com", ns, false, duration, results, &wg)
 		if err != nil {
-			t.Errorf("Woah, we have an error")
+			t.Errorf("Woah, we have an error: %s", err)
 		}
 	}()
 	wg.Wait()

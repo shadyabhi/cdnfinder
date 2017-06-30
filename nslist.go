@@ -52,9 +52,9 @@ func saveNSFile(nsURL string) (err error) {
 	return nil
 }
 
-func createNSMap(nsURL string) error {
+func createNSMap(nsURL, nsFile string) error {
 	// Download Nameserver file if needed
-	err := downloadNS(nsURL)
+	err := downloadNS(nsURL, nsFile)
 	if err != nil {
 		logrus.Fatalf("Unable to fetch %s or it doesn't exist, can't proceed further without that: %s", nsFile, err)
 	}
@@ -121,7 +121,7 @@ func createNSMap(nsURL string) error {
 }
 
 // downloadNS downloads NS file if it doesn't exist
-func downloadNS(nsURL string) error {
+func downloadNS(nsURL, nsFile string) error {
 	if _, err := os.Stat(nsFile); os.IsNotExist(err) {
 		logrus.Warningf("%s file was not found, downloading...", nsFile)
 		err := saveNSFile(nsURL)

@@ -10,6 +10,7 @@ import (
 var nsURLMock *httptest.Server = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "./testdata/nameservers.csv")
 }))
+var nsFileTest = "./testdata/nameservers.csv"
 
 func TestSaveNSFile(t *testing.T) {
 
@@ -20,7 +21,7 @@ func TestSaveNSFile(t *testing.T) {
 }
 
 func TestCreateNSMap(t *testing.T) {
-	err := createNSMap(nsURLMock.URL)
+	err := createNSMap(nsURLMock.URL, nsFileTest)
 	if err != nil {
 		t.Errorf("Error creating NS Map: %s", err)
 	}
@@ -32,17 +33,7 @@ func TestCreateNSMap(t *testing.T) {
 }
 
 func TestDownloadNS(t *testing.T) {
-	// Delete file
-	if _, err := os.Stat(nsFile); err == nil {
-		err := os.Remove(nsFile)
-		if err != nil {
-			t.Errorf("Error deleting the %s file: %s", nsFile, err)
-		} else {
-			t.Logf("Successfully deleted file %s, will execute downloadNS() now", nsFile)
-		}
-	}
-
-	err := downloadNS(nsURLMock.URL)
+	err := downloadNS(nsURLMock.URL, nsFileTest)
 	if err != nil {
 		t.Errorf("Error downloading Nameserver file: %s", err)
 	}
