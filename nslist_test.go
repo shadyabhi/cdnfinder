@@ -20,7 +20,7 @@ func TestSaveNSFile(t *testing.T) {
 }
 
 func TestCreateNSMap(t *testing.T) {
-	err := createNSMap()
+	err := createNSMap(nsURLMock.URL)
 	if err != nil {
 		t.Errorf("Error creating NS Map: %s", err)
 	}

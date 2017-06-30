@@ -58,7 +58,7 @@ func main() {
 	}
 
 	// Create NS map
-	err = createNSMap()
+	err = createNSMap(nsURL)
 	if err != nil {
 		logrus.Fatalf("Couldn't create map of NS: %s", err)
 	}

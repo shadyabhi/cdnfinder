@@ -52,7 +52,7 @@ func saveNSFile(nsURL string) (err error) {
 	return nil
 }
 
-func createNSMap() error {
+func createNSMap(nsURL string) error {
 	// Download Nameserver file if needed
 	err := downloadNS(nsURL)
 	if err != nil {
