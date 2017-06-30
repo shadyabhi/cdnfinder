@@ -6,7 +6,6 @@ import (
 )
 
 func TestMkFQDN(t *testing.T) {
-	t.Parallel()
 	var ttCases = []struct {
 		in  string
 		out string
@@ -22,7 +21,6 @@ func TestMkFQDN(t *testing.T) {
 }
 
 func TestQueryDNS(t *testing.T) {
-	t.Parallel()
 	in := "torrent.abhi.host"
 	out := "abhijeetr.com."
 	duration, _ := time.ParseDuration("3s")
