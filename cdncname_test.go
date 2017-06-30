@@ -5,6 +5,7 @@ import (
 )
 
 func TestReadDb(t *testing.T) {
+	t.Parallel()
 	f, err := readFile("./data/cnamechain.json")
 	if err != nil {
 		t.Errorf("Error opening/reading file: %s", err)
@@ -15,6 +16,7 @@ func TestReadDb(t *testing.T) {
 }
 
 func TestParseJSON(t *testing.T) {
+	t.Parallel()
 	err := parseCNAMEs("./data/cnamechain.json")
 	if err != nil {
 		t.Errorf("Error parsing DB file: %s", err)
@@ -26,6 +28,7 @@ func TestParseJSON(t *testing.T) {
 }
 
 func TestGetCDN(t *testing.T) {
+	t.Parallel()
 	in := "e9706.dscg.akamaiedge.net"
 	out := "Akamai"
 	cdn, err := getCDN("e9706.dscg.akamaiedge.net")

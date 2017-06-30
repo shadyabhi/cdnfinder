@@ -6,6 +6,7 @@ import (
 )
 
 func TestParseCCJSON(t *testing.T) {
+	t.Parallel()
 	expectedLines := 249
 
 	err := parseCCJSON(ccJSONLoc)
@@ -21,6 +22,7 @@ func TestParseCCJSON(t *testing.T) {
 }
 
 func TestCreateCountryMap(t *testing.T) {
+	t.Parallel()
 	if err := createCountryMap(); err != nil {
 		t.Errorf("Error creating country map: %s", err)
 	}

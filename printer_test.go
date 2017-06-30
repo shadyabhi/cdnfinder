@@ -7,6 +7,7 @@ import (
 )
 
 func TestPrintResponse(t *testing.T) {
+	t.Parallel()
 	var wg sync.WaitGroup
 	duration, _ := time.ParseDuration("3s")
 

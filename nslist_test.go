@@ -13,6 +13,7 @@ var nsURLMock *httptest.Server = httptest.NewServer(http.HandlerFunc(func(w http
 var nsFileTest = "./testdata/nameservers.csv"
 
 func TestSaveNSFile(t *testing.T) {
+	t.Parallel()
 
 	err := saveNSFile(nsURLMock.URL)
 	if err != nil {
@@ -21,6 +22,7 @@ func TestSaveNSFile(t *testing.T) {
 }
 
 func TestCreateNSMap(t *testing.T) {
+	t.Parallel()
 	err := createNSMap(nsURLMock.URL, nsFileTest)
 	if err != nil {
 		t.Errorf("Error creating NS Map: %s", err)
@@ -33,6 +35,7 @@ func TestCreateNSMap(t *testing.T) {
 }
 
 func TestDownloadNS(t *testing.T) {
+	t.Parallel()
 	err := downloadNS(nsURLMock.URL, nsFileTest)
 	if err != nil {
 		t.Errorf("Error downloading Nameserver file: %s", err)
