@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/shadyabhi/cdnfinder.png)](https://travis-ci.org/shadyabhi/cdnfinder)
+[![codecov](https://codecov.io/gh/shadyabhi/cdnfinder/branch/master/graph/badge.svg)](https://codecov.io/gh/shadyabhi/cdnfinder)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/shadyabhi/cdnfinder)
+
 # Summary
 
 * This program gets the list of public nameservers from https://public-dns.info/.
